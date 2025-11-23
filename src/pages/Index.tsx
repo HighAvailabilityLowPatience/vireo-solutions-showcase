@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import Footer from "@/components/Footer";
 
 interface Product {
   id: string;
@@ -40,7 +41,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <header className="px-6 py-8 md:px-12 md:py-12">
         <div className="flex items-center gap-3">
@@ -56,7 +57,7 @@ const Index = () => {
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-2xl px-6 py-12 md:py-20">
+      <main className="mx-auto max-w-2xl px-6 py-12 md:py-20 flex-1">
         {/* Product Selector */}
         <div className="space-y-3 text-center">
           <label htmlFor="product-select" className="block text-sm font-medium text-muted-foreground">
@@ -146,6 +147,8 @@ const Index = () => {
           </Card>
         )}
       </main>
+
+      <Footer />
     </div>
   );
 };
