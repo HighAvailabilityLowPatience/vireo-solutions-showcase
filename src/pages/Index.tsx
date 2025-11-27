@@ -3,6 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Footer from "@/components/Footer";
+import logo from "@/assets/logo.png";
 
 interface Product {
   id: string;
@@ -44,16 +45,7 @@ const Index = () => {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <header className="px-6 py-8 md:px-12 md:py-12">
-        <div className="flex items-center gap-3">
-          {/* Logo Placeholder */}
-          <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center">
-            <span className="text-xs font-medium text-muted-foreground">LOGO</span>
-          </div>
-          {/* Company Name */}
-          <div>
-            <h1 className="text-sm font-medium text-foreground">Vireo Vitalis Solutions</h1>
-          </div>
-        </div>
+        <img src={logo} alt="Vireo Vitalis Solutions" className="h-16 w-auto" />
       </header>
 
       {/* Main Content */}
