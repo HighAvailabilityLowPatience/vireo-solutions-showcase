@@ -1,40 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Footer from "@/components/Footer";
 import logo from "@/assets/logo.png";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Product {
   id: string;
   title: string;
   description: string;
-  stripeUrl: string;
+  stripe_url: string | null;
+  video_url: string | null;
+  price: number | null;
 }
 
-const products: Product[] = [
-  {
-    id: "repo-license",
-    title: "Repo License Key Manager",
-    description: "Streamline license key generation and validation for your repositories. Built-in analytics, webhook support, and revocation controls.",
-    stripeUrl: "https://buy.stripe.com/placeholder-repo-license",
-  },
-  {
-    id: "automation-toolkit",
-    title: "Automation Toolkit",
-    description: "Powerful automation suite for CI/CD pipelines, deployment workflows, and infrastructure management. Save hours with pre-built templates.",
-    stripeUrl: "https://buy.stripe.com/placeholder-automation-toolkit",
-  },
-  {
-    id: "cloud-infra",
-    title: "Cloud Infra Visualizer",
-    description: "Visualize and manage your cloud infrastructure with interactive diagrams. Real-time monitoring, cost analysis, and dependency mapping.",
-    stripeUrl: "https://buy.stripe.com/placeholder-cloud-infra",
-  },
-];
-
 const Index = () => {
+  const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const { user, isAdmin } = useAuth();
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('created_at', { ascending: true });
+
+    if (!error && data) {
+      setProducts(data);
+    }
+    setIsLoading(false);
+  };
 
   const handleProductSelect = (productId: string) => {
     const product = products.find((p) => p.id === productId);
@@ -44,8 +47,28 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <header className="px-6 py-8 md:px-12 md:py-12">
+      <header className="px-6 py-8 md:px-12 md:py-12 flex items-center justify-between">
         <img src={logo} alt="Vireo Vitalis Solutions" className="h-16 w-auto" />
+        <div className="flex items-center gap-4">
+          {isAdmin && (
+            <Link to="/admin">
+              <Button variant="outline" size="sm" className="border-border">
+                Admin
+              </Button>
+            </Link>
+          )}
+          {user ? (
+            <span className="text-sm text-muted-foreground hidden sm:inline">
+              {user.email}
+            </span>
+          ) : (
+            <Link to="/auth">
+              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                Sign In
+              </Button>
+            </Link>
+          )}
+        </div>
       </header>
 
       {/* Main Content */}
@@ -121,19 +144,29 @@ const Index = () => {
 
               {/* Buy Button */}
               <div className="pt-4">
-                <Button
-                  asChild
-                  size="lg"
-                  className="w-full md:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  <a
-                    href={selectedProduct.stripeUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                {selectedProduct.stripe_url ? (
+                  <Button
+                    asChild
+                    size="lg"
+                    className="w-full md:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
                   >
-                    Buy License
-                  </a>
-                </Button>
+                    <a
+                      href={selectedProduct.stripe_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Buy License {selectedProduct.price && `- $${selectedProduct.price}`}
+                    </a>
+                  </Button>
+                ) : (
+                  <Button
+                    size="lg"
+                    disabled
+                    className="w-full md:w-auto"
+                  >
+                    Coming Soon
+                  </Button>
+                )}
               </div>
             </div>
           </Card>
