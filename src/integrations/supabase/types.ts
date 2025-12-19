@@ -14,6 +14,98 @@ export type Database = {
   }
   public: {
     Tables: {
+      licenses: {
+        Row: {
+          created_at: string | null
+          customer_email: string
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          license_key: string
+          order_id: string | null
+          product_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          customer_email: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          license_key: string
+          order_id?: string | null
+          product_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          customer_email?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          license_key?: string
+          order_id?: string | null
+          product_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "licenses_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "licenses_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          amount_cents: number | null
+          created_at: string | null
+          currency: string | null
+          customer_email: string
+          id: string
+          product_id: string | null
+          status: string | null
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+        }
+        Insert: {
+          amount_cents?: number | null
+          created_at?: string | null
+          currency?: string | null
+          customer_email: string
+          id?: string
+          product_id?: string | null
+          status?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+        }
+        Update: {
+          amount_cents?: number | null
+          created_at?: string | null
+          currency?: string | null
+          customer_email?: string
+          id?: string
+          product_id?: string | null
+          status?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           created_at: string | null
