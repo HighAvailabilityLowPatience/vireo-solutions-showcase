@@ -59,7 +59,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-2">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -70,7 +70,18 @@ const Navbar = () => {
                   scrollToSection(link.href);
                 }
               }}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="group relative px-4 py-2 text-sm font-medium text-muted-foreground 
+                border border-primary/20 rounded-full 
+                bg-background/50 backdrop-blur-sm
+                hover:text-foreground hover:border-primary/50 
+                hover:shadow-[0_0_20px_hsl(258_89%_66%/0.3)]
+                hover:bg-primary/5
+                transition-all duration-300
+                before:absolute before:bottom-1 before:left-1/2 before:-translate-x-1/2 
+                before:w-0 before:h-[2px] before:rounded-full
+                before:bg-gradient-to-r before:from-primary before:via-purple-400 before:to-primary
+                before:transition-all before:duration-300 
+                hover:before:w-2/3"
             >
               {link.name}
             </a>
@@ -124,7 +135,7 @@ const Navbar = () => {
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="bg-background border-border">
-            <nav className="flex flex-col gap-6 mt-8">
+            <nav className="flex flex-col gap-4 mt-8">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
@@ -135,7 +146,12 @@ const Navbar = () => {
                       scrollToSection(link.href);
                     }
                   }}
-                  className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                  className="relative px-4 py-3 text-lg font-medium text-foreground 
+                    border-l-2 border-primary/30 
+                    bg-gradient-to-r from-primary/5 to-transparent
+                    hover:border-primary hover:from-primary/15 hover:to-primary/5
+                    hover:shadow-[inset_0_0_20px_hsl(258_89%_66%/0.1)]
+                    transition-all duration-300"
                 >
                   {link.name}
                 </a>
