@@ -22,7 +22,8 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "What We Do", href: "#what-we-do" },
-    { name: "Solutions", href: "/solutions" },
+    { name: "Business Solutions", href: "/business-solutions" },
+    { name: "Crafted by VVS", href: "/solutions" },
   ];
 
   const scrollToSection = (href: string) => {
