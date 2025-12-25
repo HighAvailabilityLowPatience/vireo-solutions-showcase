@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -9,6 +9,8 @@ import { useAuth } from "@/hooks/useAuth";
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { user, isAdmin } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,8 +30,12 @@ const Navbar = () => {
 
   const scrollToSection = (href: string) => {
     if (href.startsWith("#")) {
-      const element = document.querySelector(href);
-      element?.scrollIntoView({ behavior: "smooth" });
+      if (location.pathname !== "/") {
+        navigate("/" + href);
+      } else {
+        const element = document.querySelector(href);
+        element?.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
