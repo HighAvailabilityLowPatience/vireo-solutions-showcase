@@ -5,11 +5,11 @@ import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const VIDEOS = [
-  "https://cdn.pixabay.com/video/2020/05/25/40130-424930032_large.mp4",
-  "https://cdn.pixabay.com/video/2021/02/21/65881-515376035_large.mp4",
-  "https://cdn.pixabay.com/video/2020/08/12/47244-449623750_large.mp4",
-  "https://cdn.pixabay.com/video/2019/07/30/25484-351553263_large.mp4",
-  "https://cdn.pixabay.com/video/2020/02/04/31806-389965037_large.mp4",
+  "https://cdn.pixabay.com/video/2020/07/30/46026-447087782_large.mp4",
+  "https://cdn.pixabay.com/video/2022/03/09/110571-686916769_large.mp4",
+  "https://cdn.pixabay.com/video/2021/08/20/85809-590844563_large.mp4",
+  "https://cdn.pixabay.com/video/2020/05/31/40613-427228837_large.mp4",
+  "https://cdn.pixabay.com/video/2019/10/28/28618-369030907_large.mp4",
 ];
 
 const HeroSection = () => {
@@ -72,7 +72,7 @@ const HeroSection = () => {
             size="lg"
             className="border-primary text-primary hover:bg-primary/10 hover:scale-105 transition-all duration-300 text-lg px-8 py-6"
           >
-            <Link to="/solutions">Our Crafted Projects</Link>
+            <Link to="/solutions">Our Crafted Solutions</Link>
           </Button>
         </div>
       </div>
