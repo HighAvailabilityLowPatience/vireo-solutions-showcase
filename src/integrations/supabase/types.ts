@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      hero_videos: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          is_active: boolean
+          thumbnail_url: string | null
+          title: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          thumbnail_url?: string | null
+          title: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          thumbnail_url?: string | null
+          title?: string
+          url?: string
+        }
+        Relationships: []
+      }
       licenses: {
         Row: {
           created_at: string | null
