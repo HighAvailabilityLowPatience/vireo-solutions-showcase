@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, ChevronDown, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/hooks/useAuth";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -81,7 +87,20 @@ const Navbar = () => {
             </Link>
           )}
           {user ? (
-            <span className="text-sm text-muted-foreground">{user.email}</span>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                  {user.email}
+                  <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-background border-border">
+                <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <Link to="/auth">
               <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
@@ -125,7 +144,17 @@ const Navbar = () => {
                 </Link>
               )}
               {user ? (
-                <span className="text-sm text-muted-foreground">{user.email}</span>
+                <>
+                  <span className="text-sm text-muted-foreground">{user.email}</span>
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => signOut()} 
+                    className="text-lg font-medium text-foreground justify-start p-0 h-auto"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
+                  </Button>
+                </>
               ) : (
                 <Link to="/auth" className="text-lg font-medium text-foreground">
                   Sign In
