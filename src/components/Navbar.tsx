@@ -29,6 +29,8 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Home", href: "/" },
+    { name: "What We Do", href: "#what-we-do" },
+    { name: "Business Solutions", href: "/business-solutions" },
     { name: "Crafted by VVS", href: "/solutions" },
   ];
 
