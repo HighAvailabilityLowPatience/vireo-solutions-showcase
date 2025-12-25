@@ -3,27 +3,48 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
-// Reliable IT/business themed stock videos from Pexels CDN
-const VIDEOS = [
-  "https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_30fps.mp4", // Abstract digital network
-  "https://videos.pexels.com/video-files/7710243/7710243-uhd_2560_1440_30fps.mp4", // Modern office/business
-  "https://videos.pexels.com/video-files/3141210/3141210-uhd_2560_1440_30fps.mp4", // Technology data visualization
-  "https://videos.pexels.com/video-files/4065906/4065906-uhd_2560_1440_30fps.mp4", // Urban cityscape innovation
+// Fallback videos in case database is empty
+const FALLBACK_VIDEOS = [
+  "https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_30fps.mp4",
+  "https://videos.pexels.com/video-files/7989670/7989670-uhd_2560_1440_25fps.mp4",
+  "https://videos.pexels.com/video-files/6963744/6963744-uhd_2560_1440_25fps.mp4",
+  "https://videos.pexels.com/video-files/5377684/5377684-uhd_2560_1440_25fps.mp4",
 ];
 
 const HeroSection = () => {
+  const [videos, setVideos] = useState<string[]>(FALLBACK_VIDEOS);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isFading, setIsFading] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const preloadRef = useRef<HTMLVideoElement | null>(null);
 
+  // Fetch videos from database
+  useEffect(() => {
+    const fetchVideos = async () => {
+      const { data, error } = await supabase
+        .from('hero_videos')
+        .select('url')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+
+      if (!error && data && data.length > 0) {
+        setVideos(data.map(v => v.url));
+      }
+    };
+
+    fetchVideos();
+  }, []);
+
   // Preload next video
   useEffect(() => {
-    const nextIndex = (currentIndex + 1) % VIDEOS.length;
+    if (videos.length === 0) return;
+    
+    const nextIndex = (currentIndex + 1) % videos.length;
     const preloadVideo = document.createElement("video");
-    preloadVideo.src = VIDEOS[nextIndex];
+    preloadVideo.src = videos[nextIndex];
     preloadVideo.preload = "auto";
     preloadVideo.muted = true;
     preloadRef.current = preloadVideo;
@@ -34,26 +55,25 @@ const HeroSection = () => {
         preloadRef.current = null;
       }
     };
-  }, [currentIndex]);
+  }, [currentIndex, videos]);
 
   const handleVideoEnd = useCallback(() => {
     setIsFading(true);
     setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % VIDEOS.length);
+      setCurrentIndex((prev) => (prev + 1) % videos.length);
       setIsLoading(true);
       setIsFading(false);
     }, 500);
-  }, []);
+  }, [videos.length]);
 
   const handleCanPlay = useCallback(() => {
     setIsLoading(false);
   }, []);
 
   const handleError = useCallback(() => {
-    // Skip to next video if current one fails
-    console.warn(`Video failed to load: ${VIDEOS[currentIndex]}`);
-    setCurrentIndex((prev) => (prev + 1) % VIDEOS.length);
-  }, [currentIndex]);
+    console.warn(`Video failed to load: ${videos[currentIndex]}`);
+    setCurrentIndex((prev) => (prev + 1) % videos.length);
+  }, [currentIndex, videos]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -62,21 +82,23 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_hsl(var(--primary)/0.1)_0%,_transparent_70%)]" />
 
       {/* Single video element with proper loading/error handling */}
-      <video
-        ref={videoRef}
-        key={currentIndex}
-        src={VIDEOS[currentIndex]}
-        autoPlay
-        muted
-        playsInline
-        onEnded={handleVideoEnd}
-        onCanPlay={handleCanPlay}
-        onError={handleError}
-        className={cn(
-          "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
-          isLoading || isFading ? "opacity-0" : "opacity-100"
-        )}
-      />
+      {videos.length > 0 && (
+        <video
+          ref={videoRef}
+          key={`${currentIndex}-${videos[currentIndex]}`}
+          src={videos[currentIndex]}
+          autoPlay
+          muted
+          playsInline
+          onEnded={handleVideoEnd}
+          onCanPlay={handleCanPlay}
+          onError={handleError}
+          className={cn(
+            "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
+            isLoading || isFading ? "opacity-0" : "opacity-100"
+          )}
+        />
+      )}
 
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-background/70" />

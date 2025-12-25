@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import AdminProductForm from '@/components/AdminProductForm';
 import AdminProductTable from '@/components/AdminProductTable';
+import AdminVideoManager from '@/components/AdminVideoManager';
 import logo from '@/assets/logo.png';
-import { Plus, LogOut } from 'lucide-react';
+import { Plus, LogOut, Package, Video } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -139,31 +141,50 @@ const Admin = () => {
 
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-6 py-8 md:py-12">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-semibold text-foreground">Product Management</h1>
-            <p className="text-muted-foreground mt-1">Add, edit, and manage your products</p>
-          </div>
-          <Button
-            onClick={handleAddNew}
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Product
-          </Button>
-        </div>
+        <Tabs defaultValue="products" className="w-full">
+          <TabsList className="mb-8 bg-muted/50">
+            <TabsTrigger value="products" className="flex items-center gap-2 data-[state=active]:bg-background">
+              <Package className="h-4 w-4" />
+              Products
+            </TabsTrigger>
+            <TabsTrigger value="videos" className="flex items-center gap-2 data-[state=active]:bg-background">
+              <Video className="h-4 w-4" />
+              Hero Videos
+            </TabsTrigger>
+          </TabsList>
 
-        {isLoading ? (
-          <div className="text-center py-12 text-muted-foreground">
-            Loading products...
-          </div>
-        ) : (
-          <AdminProductTable
-            products={products}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        )}
+          <TabsContent value="products">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h1 className="text-2xl font-semibold text-foreground">Product Management</h1>
+                <p className="text-muted-foreground mt-1">Add, edit, and manage your products</p>
+              </div>
+              <Button
+                onClick={handleAddNew}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Product
+              </Button>
+            </div>
+
+            {isLoading ? (
+              <div className="text-center py-12 text-muted-foreground">
+                Loading products...
+              </div>
+            ) : (
+              <AdminProductTable
+                products={products}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            )}
+          </TabsContent>
+
+          <TabsContent value="videos">
+            <AdminVideoManager />
+          </TabsContent>
+        </Tabs>
       </main>
 
       <AdminProductForm
