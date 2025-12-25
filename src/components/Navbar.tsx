@@ -108,7 +108,10 @@ const Navbar = () => {
               </Button>
             </Link>
           )}
-          <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
+          <Button 
+            asChild 
+            className="relative overflow-hidden bg-gradient-to-r from-primary via-purple-500 to-primary bg-[length:200%_100%] text-primary-foreground border border-primary/30 shadow-[0_0_20px_hsl(258_89%_66%/0.4)] hover:bg-[position:100%_0] hover:shadow-[0_0_30px_hsl(258_89%_66%/0.6)] transition-all duration-500"
+          >
             <a href="#contact">Contact Us</a>
           </Button>
         </div>
@@ -160,7 +163,9 @@ const Navbar = () => {
                   Sign In
                 </Link>
               )}
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 w-full">
+              <Button 
+                className="relative overflow-hidden bg-gradient-to-r from-primary via-purple-500 to-primary bg-[length:200%_100%] text-primary-foreground border border-primary/30 shadow-[0_0_20px_hsl(258_89%_66%/0.4)] hover:bg-[position:100%_0] hover:shadow-[0_0_30px_hsl(258_89%_66%/0.6)] transition-all duration-500 w-full"
+              >
                 <a href="#contact">Contact Us</a>
               </Button>
             </nav>
