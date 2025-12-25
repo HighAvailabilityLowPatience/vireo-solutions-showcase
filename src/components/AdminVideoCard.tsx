@@ -2,7 +2,9 @@ import { useState, useRef } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Pencil, Trash2, GripVertical, Play, Pause, Check, X } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Pencil, Trash2, GripVertical, Play, Pause, Check, X, Clock } from 'lucide-react';
 
 interface HeroVideo {
   id: string;
@@ -11,13 +13,14 @@ interface HeroVideo {
   is_active: boolean;
   display_order: number;
   thumbnail_url: string | null;
+  duration_seconds: number | null;
 }
 
 interface AdminVideoCardProps {
   video: HeroVideo;
   onToggle: (id: string, isActive: boolean) => void;
   onDelete: (id: string) => void;
-  onUpdate: (id: string, title: string) => void;
+  onUpdate: (id: string, updates: { title?: string; duration_seconds?: number | null }) => void;
   isUpdating: boolean;
 }
 
@@ -26,6 +29,8 @@ const AdminVideoCard = ({ video, onToggle, onDelete, onUpdate, isUpdating }: Adm
   const [editTitle, setEditTitle] = useState(video.title);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [duration, setDuration] = useState<number>(video.duration_seconds ?? 15);
+  const [playFullVideo, setPlayFullVideo] = useState(video.duration_seconds === null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleToggle = (checked: boolean) => {
@@ -34,9 +39,22 @@ const AdminVideoCard = ({ video, onToggle, onDelete, onUpdate, isUpdating }: Adm
 
   const handleSaveTitle = () => {
     if (editTitle.trim() && editTitle !== video.title) {
-      onUpdate(video.id, editTitle.trim());
+      onUpdate(video.id, { title: editTitle.trim() });
     }
     setIsEditing(false);
+  };
+
+  const handleDurationChange = (values: number[]) => {
+    const newDuration = values[0];
+    setDuration(newDuration);
+    if (!playFullVideo) {
+      onUpdate(video.id, { duration_seconds: newDuration });
+    }
+  };
+
+  const handlePlayFullVideoChange = (checked: boolean) => {
+    setPlayFullVideo(checked);
+    onUpdate(video.id, { duration_seconds: checked ? null : duration });
   };
 
   const handleCancelEdit = () => {
@@ -130,6 +148,36 @@ const AdminVideoCard = ({ video, onToggle, onDelete, onUpdate, isUpdating }: Adm
             </div>
           )}
           <p className="text-sm text-muted-foreground mt-1">Order: {video.display_order}</p>
+          
+          {/* Duration Control */}
+          <div className="flex items-center gap-3 mt-2">
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            <div className="flex items-center gap-2 flex-1 max-w-[200px]">
+              <Slider
+                value={[duration]}
+                onValueChange={handleDurationChange}
+                min={5}
+                max={60}
+                step={5}
+                disabled={playFullVideo || isUpdating}
+                className="flex-1"
+              />
+              <span className="text-sm text-muted-foreground w-12">
+                {duration}s
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id={`full-${video.id}`}
+                checked={playFullVideo}
+                onCheckedChange={handlePlayFullVideoChange}
+                disabled={isUpdating}
+              />
+              <label htmlFor={`full-${video.id}`} className="text-sm text-muted-foreground cursor-pointer">
+                Full video
+              </label>
+            </div>
+          </div>
         </div>
 
         {/* Status & Actions */}
