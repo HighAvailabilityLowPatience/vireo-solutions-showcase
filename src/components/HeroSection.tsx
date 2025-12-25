@@ -1,46 +1,82 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// Reliable IT/business themed stock videos from Pexels CDN
 const VIDEOS = [
-  "https://cdn.pixabay.com/video/2020/07/30/46026-447087782_large.mp4",
-  "https://cdn.pixabay.com/video/2022/03/09/110571-686916769_large.mp4",
-  "https://cdn.pixabay.com/video/2021/08/20/85809-590844563_large.mp4",
-  "https://cdn.pixabay.com/video/2020/05/31/40613-427228837_large.mp4",
-  "https://cdn.pixabay.com/video/2019/10/28/28618-369030907_large.mp4",
+  "https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_30fps.mp4", // Abstract digital network
+  "https://videos.pexels.com/video-files/7710243/7710243-uhd_2560_1440_30fps.mp4", // Modern office/business
+  "https://videos.pexels.com/video-files/3141210/3141210-uhd_2560_1440_30fps.mp4", // Technology data visualization
+  "https://videos.pexels.com/video-files/4065906/4065906-uhd_2560_1440_30fps.mp4", // Urban cityscape innovation
 ];
 
 const HeroSection = () => {
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFading, setIsFading] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const preloadRef = useRef<HTMLVideoElement | null>(null);
 
+  // Preload next video
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentVideoIndex((prev) => (prev + 1) % VIDEOS.length);
-    }, 8000);
+    const nextIndex = (currentIndex + 1) % VIDEOS.length;
+    const preloadVideo = document.createElement("video");
+    preloadVideo.src = VIDEOS[nextIndex];
+    preloadVideo.preload = "auto";
+    preloadVideo.muted = true;
+    preloadRef.current = preloadVideo;
 
-    return () => clearInterval(interval);
+    return () => {
+      if (preloadRef.current) {
+        preloadRef.current.src = "";
+        preloadRef.current = null;
+      }
+    };
+  }, [currentIndex]);
+
+  const handleVideoEnd = useCallback(() => {
+    setIsFading(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % VIDEOS.length);
+      setIsLoading(true);
+      setIsFading(false);
+    }, 500);
   }, []);
+
+  const handleCanPlay = useCallback(() => {
+    setIsLoading(false);
+  }, []);
+
+  const handleError = useCallback(() => {
+    // Skip to next video if current one fails
+    console.warn(`Video failed to load: ${VIDEOS[currentIndex]}`);
+    setCurrentIndex((prev) => (prev + 1) % VIDEOS.length);
+  }, [currentIndex]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Rotating Video Backgrounds with Crossfade */}
-      {VIDEOS.map((src, index) => (
-        <video
-          key={index}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className={cn(
-            "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000",
-            index === currentVideoIndex ? "opacity-100" : "opacity-0"
-          )}
-        >
-          <source src={src} type="video/mp4" />
-        </video>
-      ))}
+      {/* Fallback gradient background - always visible behind video */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-background" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_hsl(var(--primary)/0.1)_0%,_transparent_70%)]" />
+
+      {/* Single video element with proper loading/error handling */}
+      <video
+        ref={videoRef}
+        key={currentIndex}
+        src={VIDEOS[currentIndex]}
+        autoPlay
+        muted
+        playsInline
+        onEnded={handleVideoEnd}
+        onCanPlay={handleCanPlay}
+        onError={handleError}
+        className={cn(
+          "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
+          isLoading || isFading ? "opacity-0" : "opacity-100"
+        )}
+      />
 
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-background/70" />
