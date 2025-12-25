@@ -55,14 +55,32 @@ const Solutions = () => {
       <Navbar />
 
       {/* Hero Banner */}
-      <section className="pt-32 pb-16 bg-gradient-to-b from-primary/10 to-background">
+      <section className="pt-32 pb-12 bg-gradient-to-b from-primary/5 to-background">
         <div className="container mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight mb-4">
-            Our Crafted Solutions
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-light text-foreground tracking-wide mb-6">
+            Crafted Solutions
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Explore our portfolio of innovative software solutions designed to transform your business.
+          
+          {/* Decorative Line */}
+          <div className="w-16 h-px bg-primary/40 mx-auto mb-8" />
+          
+          {/* Philosophy Statement */}
+          <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto font-light leading-relaxed mb-8">
+            Each solution is thoughtfully designed for those who appreciate precision and quiet excellence.
           </p>
+
+          {/* Subtle Tags */}
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+            <span className="text-xs tracking-widest uppercase text-muted-foreground/70 border border-border/50 px-4 py-2 rounded-full">
+              Bespoke Development
+            </span>
+            <span className="text-xs tracking-widest uppercase text-muted-foreground/70 border border-border/50 px-4 py-2 rounded-full">
+              Tailored Solutions
+            </span>
+            <span className="text-xs tracking-widest uppercase text-muted-foreground/70 border border-border/50 px-4 py-2 rounded-full">
+              Quiet Excellence
+            </span>
+          </div>
         </div>
       </section>
 
