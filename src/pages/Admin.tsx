@@ -8,8 +8,9 @@ import { supabase } from '@/integrations/supabase/client';
 import AdminProductForm from '@/components/AdminProductForm';
 import AdminProductTable from '@/components/AdminProductTable';
 import AdminVideoManager from '@/components/AdminVideoManager';
+import { AdminSiteSettings } from '@/components/AdminSiteSettings';
 import logo from '@/assets/logo.png';
-import { Plus, LogOut, Package, Video } from 'lucide-react';
+import { Plus, LogOut, Package, Video, Settings } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -151,6 +152,10 @@ const Admin = () => {
               <Video className="h-4 w-4" />
               Hero Videos
             </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2 data-[state=active]:bg-background">
+              <Settings className="h-4 w-4" />
+              Site Settings
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="products">
@@ -183,6 +188,14 @@ const Admin = () => {
 
           <TabsContent value="videos">
             <AdminVideoManager />
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <div className="mb-8">
+              <h1 className="text-2xl font-semibold text-foreground">Site Settings</h1>
+              <p className="text-muted-foreground mt-1">Manage site access and configuration</p>
+            </div>
+            <AdminSiteSettings />
           </TabsContent>
         </Tabs>
       </main>
