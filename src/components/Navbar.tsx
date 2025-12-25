@@ -22,7 +22,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "What We Do", href: "#what-we-do" },
-    { name: "Solutions", href: "#solutions" },
+    { name: "Solutions", href: "/solutions" },
   ];
 
   const scrollToSection = (href: string) => {
