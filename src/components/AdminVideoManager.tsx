@@ -13,6 +13,7 @@ interface HeroVideo {
   is_active: boolean;
   display_order: number;
   thumbnail_url: string | null;
+  duration_seconds: number | null;
 }
 
 const AdminVideoManager = () => {
@@ -91,25 +92,25 @@ const AdminVideoManager = () => {
     }
   };
 
-  const handleUpdateTitle = async (id: string, title: string) => {
+  const handleUpdate = async (id: string, updates: { title?: string; duration_seconds?: number | null }) => {
     const { error } = await supabase
       .from('hero_videos')
-      .update({ title })
+      .update(updates)
       .eq('id', id);
 
     if (error) {
       toast({
         title: 'Error',
-        description: 'Failed to update video title.',
+        description: 'Failed to update video.',
         variant: 'destructive',
       });
     } else {
       setVideos(prev => 
-        prev.map(v => v.id === id ? { ...v, title } : v)
+        prev.map(v => v.id === id ? { ...v, ...updates } : v)
       );
       toast({
-        title: 'Title updated',
-        description: 'The video title has been updated.',
+        title: 'Video updated',
+        description: 'Changes saved successfully.',
       });
     }
   };
@@ -157,7 +158,7 @@ const AdminVideoManager = () => {
               video={video}
               onToggle={handleToggle}
               onDelete={handleDelete}
-              onUpdate={handleUpdateTitle}
+              onUpdate={handleUpdate}
               isUpdating={isUpdating}
             />
           ))}
