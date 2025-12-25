@@ -1,28 +1,46 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const VIDEOS = [
+  "https://cdn.pixabay.com/video/2020/05/25/40130-424930032_large.mp4",
+  "https://cdn.pixabay.com/video/2021/02/21/65881-515376035_large.mp4",
+  "https://cdn.pixabay.com/video/2020/08/12/47244-449623750_large.mp4",
+  "https://cdn.pixabay.com/video/2019/07/30/25484-351553263_large.mp4",
+  "https://cdn.pixabay.com/video/2020/02/04/31806-389965037_large.mp4",
+];
 
 const HeroSection = () => {
-  const scrollToSolutions = () => {
-    const element = document.querySelector("#solutions");
-    element?.scrollIntoView({ behavior: "smooth" });
-  };
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentVideoIndex((prev) => (prev + 1) % VIDEOS.length);
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Video Background */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source
-          src="https://cdn.pixabay.com/video/2020/05/25/40130-424930032_large.mp4"
-          type="video/mp4"
-        />
-      </video>
+      {/* Rotating Video Backgrounds with Crossfade */}
+      {VIDEOS.map((src, index) => (
+        <video
+          key={index}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className={cn(
+            "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000",
+            index === currentVideoIndex ? "opacity-100" : "opacity-0"
+          )}
+        >
+          <source src={src} type="video/mp4" />
+        </video>
+      ))}
 
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-background/70" />
@@ -49,12 +67,12 @@ const HeroSection = () => {
             <Link to="/business-solutions">Business Solutions</Link>
           </Button>
           <Button
+            asChild
             variant="outline"
             size="lg"
-            onClick={scrollToSolutions}
             className="border-primary text-primary hover:bg-primary/10 hover:scale-105 transition-all duration-300 text-lg px-8 py-6"
           >
-            Our Crafted Projects
+            <Link to="/solutions">Our Crafted Projects</Link>
           </Button>
         </div>
       </div>
