@@ -1,4 +1,4 @@
-import { Mail, Github, Linkedin, Twitter } from "lucide-react";
+import { Mail } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -9,7 +9,7 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-foreground">Vireo Vitalis Solutions</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Enterprise software solutions for modern development teams. Streamline your workflow with our professional tools.
+              Software solutions for modern teams. Streamline your workflow with our professional tools.
             </p>
           </div>
 
@@ -17,47 +17,14 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-foreground">Contact</h3>
             <a
-              href="mailto:support@vireovitalis.com"
+              href="mailto:admin@vvsportal.com"
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <Mail className="h-4 w-4" />
-              support@vireovitalis.com
+              admin@vvsportal.com
             </a>
           </div>
 
-          {/* Social Links */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-foreground">Follow Us</h3>
-            <div className="flex gap-4">
-              <a
-                href="https://twitter.com/vireovitalis"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a
-                href="https://github.com/vireovitalis"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="GitHub"
-              >
-                <Github className="h-5 w-5" />
-              </a>
-              <a
-                href="https://linkedin.com/company/vireovitalis"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
-            </div>
-          </div>
         </div>
 
         {/* Copyright */}

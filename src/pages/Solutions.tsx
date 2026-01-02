@@ -61,7 +61,7 @@ const Solutions = () => {
             Our Crafted Solutions
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Explore our portfolio of innovative software solutions designed to transform your business.
+            Innovative software solutions designed to optimize your process.
           </p>
         </div>
       </section>
