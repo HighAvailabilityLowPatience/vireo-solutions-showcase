@@ -15,7 +15,7 @@ const Admin = () => {
     setLoading(true);
     setError('');
     const { data, error } = await supabase.functions.invoke(
-      'verify-site-password',
+      'verify-admin-password',
       { body: { password, type: 'admin' } }
     );
     if (error) setError('Error verifying');
