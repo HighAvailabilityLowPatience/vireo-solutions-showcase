@@ -3,6 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import logo from '@/assets/logo.png';
+import AdminProductTable from '@/components/AdminProductTable';
+import AdminVideoManager from '@/components/AdminVideoManager';
+import { AdminSiteSettings } from '@/components/AdminSiteSettings';
+
 
 const Admin = () => {
   const [password, setPassword] = useState('');
@@ -44,13 +48,13 @@ const Admin = () => {
     );
   }
 
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-semibold">Admin Dashboard</h1>
-      <p>You're in.</p>
-      {/* keep your existing dashboard components here */}
-    </div>
-  );
+ return (
+  <div className="p-8">
+    <AdminProductTable />
+    <AdminVideoManager />
+    <AdminSiteSettings />
+  </div>
+);
 };
 
 export default Admin;
